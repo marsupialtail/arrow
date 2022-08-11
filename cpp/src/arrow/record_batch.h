@@ -200,11 +200,19 @@ class ARROW_EXPORT RecordBatch {
   /// \return Status
   virtual Status ValidateFull() const;
 
+  /// \brief Get the number of bytes scanned in the source that corresponds to this batch
+  int64_t get_batch_source_bytes() {return batch_source_bytes_;}
+
+  /// \brief Set the number of bytes scanned in the source that corresponds to this batch
+  void set_batch_source_bytes(int64_t batch_source_bytes) {batch_source_bytes_ = batch_source_bytes;}
+
  protected:
   RecordBatch(const std::shared_ptr<Schema>& schema, int64_t num_rows);
 
   std::shared_ptr<Schema> schema_;
   int64_t num_rows_;
+
+  int64_t batch_source_bytes_ = -1;
 
  private:
   ARROW_DISALLOW_COPY_AND_ASSIGN(RecordBatch);

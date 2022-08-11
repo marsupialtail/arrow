@@ -954,6 +954,7 @@ class StreamingReaderImpl : public ReaderMixin,
             const DecodedBlock& block) mutable -> Result<std::shared_ptr<RecordBatch>> {
       bytes_decoded->fetch_add(block.bytes_processed + prev_bytes_processed);
       prev_bytes_processed = 0;
+      block.record_batch->set_batch_source_bytes(block.bytes_processed);
       return block.record_batch;
     };
 

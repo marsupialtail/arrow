@@ -102,6 +102,7 @@ class ScannerRecordBatchReader : public RecordBatchReader {
 const FieldVector kAugmentedFields{
     field("__fragment_index", int32()),
     field("__batch_index", int32()),
+    field("__batch_source_bytes",int64()),
     field("__last_in_fragment", boolean()),
     field("__filename", utf8()),
 };
@@ -344,7 +345,7 @@ Result<EnumeratedRecordBatch> ToEnumeratedRecordBatch(
   out.fragment.value = fragments[out.fragment.index];
 
   out.record_batch.index = batch->values[num_fields + 1].scalar_as<Int32Scalar>().value;
-  out.record_batch.last = batch->values[num_fields + 2].scalar_as<BooleanScalar>().value;
+  out.record_batch.last = batch->values[num_fields + 3].scalar_as<BooleanScalar>().value;
   ARROW_ASSIGN_OR_RAISE(out.record_batch.value,
                         batch->ToRecordBatch(options.projected_schema, options.pool));
   return out;
@@ -922,6 +923,7 @@ Result<compute::ExecNode*> MakeScanNode(compute::ExecPlan* plan,
         // tag rows with fragment- and batch-of-origin
         batch->values.emplace_back(partial.fragment.index);
         batch->values.emplace_back(partial.record_batch.index);
+        batch->values.emplace_back(partial.record_batch.value->get_batch_source_bytes());
         batch->values.emplace_back(partial.record_batch.last);
         batch->values.emplace_back(partial.fragment.value->ToString());
         return batch;

@@ -2234,6 +2234,8 @@ cdef class Scanner(_Weakrefable):
         The list of columns or expressions may use the special fields
         `__batch_index` (the index of the batch within the fragment), 
         `__fragment_index` (the index of the fragment within the dataset), 
+        `__byte_source_bytes` (the number of bytes in the source file 
+        that this batch corresponds to, will be -1 for unsupported data formats),
         `__last_in_fragment` (whether the batch is last in fragment), and
         `__filename` (the name of the source file or a description of the 
         source fragment).
@@ -2308,6 +2310,8 @@ cdef class Scanner(_Weakrefable):
             The list of columns or expressions may use the special fields
             `__batch_index` (the index of the batch within the fragment), 
             `__fragment_index` (the index of the fragment within the dataset), 
+            `__byte_source_bytes` (the number of bytes in the source file 
+             that this batch corresponds to, will be -1 for unsupported data formats),
             `__last_in_fragment` (whether the batch is last in fragment), and
             `__filename` (the name of the source file or a description of the 
             source fragment).
@@ -2386,6 +2390,8 @@ cdef class Scanner(_Weakrefable):
             The list of columns or expressions may use the special fields
             `__batch_index` (the index of the batch within the fragment), 
             `__fragment_index` (the index of the fragment within the dataset), 
+            `__byte_source_bytes` (the number of bytes in the source file 
+            that this batch corresponds to, will be -1 for unsupported data formats),
             `__last_in_fragment` (whether the batch is last in fragment), and
             `__filename` (the name of the source file or a description of the 
             source fragment).
