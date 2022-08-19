@@ -134,7 +134,7 @@ class TestScanner : public DatasetFixtureMixinWithParam<TestScannerParams> {
     auto columns = table.get()->ColumnNames();
     EXPECT_TRUE(std::none_of(columns.begin(), columns.end(), [](std::string& x) {
       return x == "__fragment_index" || x == "__batch_index" ||
-             x == "__last_in_fragment" || x == "__filename";
+             x == "__last_in_fragment" || x == "__filename" || x == "__batch_source_bytes";
     }));
   }
 
@@ -1513,7 +1513,7 @@ compute::Expression Materialize(std::vector<std::string> names,
                                 bool include_aug_fields = false) {
   if (include_aug_fields) {
     for (auto aug_name :
-         {"__fragment_index", "__batch_index", "__last_in_fragment", "__filename"}) {
+         {"__fragment_index", "__batch_index", "__batch_source_bytes", "__last_in_fragment", "__filename"}) {
       names.emplace_back(aug_name);
     }
   }
@@ -1542,6 +1542,7 @@ TEST(ScanNode, Schema) {
   auto fields = basic.dataset->schema()->fields();
   fields.push_back(field("__fragment_index", int32()));
   fields.push_back(field("__batch_index", int32()));
+  fields.push_back(field("__batch_source_bytes",int64()))
   fields.push_back(field("__last_in_fragment", boolean()));
   fields.push_back(field("__filename", utf8()));
   // output_schema is *always* the full augmented dataset schema, regardless of

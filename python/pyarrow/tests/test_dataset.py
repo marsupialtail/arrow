@@ -460,7 +460,8 @@ def test_scanner(dataset, dataset_reader):
                                      memory_pool=pa.default_memory_pool())
     table = scanner.to_table()
     expected_names = ['__filename', '__fragment_index',
-                      '__batch_index', '__last_in_fragment']
+                      '__batch_index', '__last_in_fragment',
+                      '__batch_source_bytes']
     assert table.column_names == expected_names
 
     sorted_table = table.sort_by('__fragment_index')
@@ -470,6 +471,8 @@ def test_scanner(dataset, dataset_reader):
     assert sorted_table['__fragment_index'].to_pylist() == ([0] * 5 + [1] * 5)
     assert sorted_table['__batch_index'].to_pylist() == [0] * 10
     assert sorted_table['__last_in_fragment'].to_pylist() == [True] * 10
+    # should not have been implemented yet
+    assert sorted_table['__batch_source_bytes'].to_pylist() == [-1] * 10
 
 
 @pytest.mark.parquet

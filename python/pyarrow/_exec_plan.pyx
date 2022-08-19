@@ -395,7 +395,7 @@ def _filter_table(table, expression, output_type=Table):
         return r
     elif output_type == InMemoryDataset:
         # Get rid of special dataset columns
-        # "__fragment_index", "__batch_index", "__last_in_fragment", "__filename"
+        # "__fragment_index", "__batch_index", "__batch_source_bytes", "__last_in_fragment", "__filename"
         return InMemoryDataset(r.select(table.schema.names))
     else:
         raise TypeError("Unsupported output type")
